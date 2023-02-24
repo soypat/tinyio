@@ -18,7 +18,8 @@ type UART interface {
 // but all are constrained to the same underlying frequency and Top set on the PWM.
 type PWM interface {
 	// SetPeriod sets the amount of time between the PWM's square wave rising flank.
-	SetPeriod(period time.Duration) error
+	// period is in nanoseconds, just like time.Duration.
+	SetPeriod(period int64) error
 
 	Top() uint32
 	// Set sets the PWM's channel to value. One can use the value returned by
