@@ -2,8 +2,6 @@ package tinyio
 
 import (
 	"io"
-	"net"
-	"time"
 )
 
 // UART represents a UART connection. It is implemented by the machine.UART type.
@@ -51,50 +49,4 @@ type I2C interface {
 	// package functions or subpackage functions.
 
 	Tx(addr uint16, w, r []byte) error
-}
-
-// A Netdever is a network device driver for Tinygo; Tinygo's network device
-// driver model.
-type Netdever interface {
-
-	// Probe initializes the network device and maintains the connection to
-	// the network.  For example, Probe will maintain the connection to the
-	// Wifi access point for a Wifi network device.
-	Probe() error
-
-	// GetHostByName returns the IP address of either a hostname or IPv4
-	// address in standard dot notation.
-	GetHostByName(name string) (net.IP, error)
-
-	// Socketer is Berkely Sockets-like interface
-	Socketer
-}
-
-type AddressFamily int
-type SockType int
-type Protocol int
-type SockAddr struct {
-	port [2]byte // Network byte order
-	ip   [4]byte // Network byte order
-}
-type SockFlags int
-type SockOpt int
-type SockOptLevel int
-type Sockfd int
-
-// Berkely Sockets-like interface.  See man page for socket(2), etc.
-type Socketer interface {
-	Socket(family AddressFamily, sockType SockType, protocol Protocol) (Sockfd, error)
-	Bind(sockfd Sockfd, myaddr SockAddr) error
-	Connect(sockfd Sockfd, servaddr SockAddr) error
-	Listen(sockfd Sockfd, backlog int) error
-	Accept(sockfd Sockfd, peer SockAddr) error
-	Send(sockfd Sockfd, buff []byte, flags SockFlags, timeout time.Duration) (int, error)
-	SendTo(sockfd Sockfd, buff []byte, flags SockFlags, to SockAddr,
-		timeout time.Duration) (int, error)
-	Recv(sockfd Sockfd, buff []byte, flags SockFlags, timeout time.Duration) (int, error)
-	RecvFrom(sockfd Sockfd, buff []byte, flags SockFlags, from SockAddr,
-		timeout time.Duration) (int, error)
-	Close(sockfd Sockfd) error
-	SetSockOpt(sockfd Sockfd, level SockOptLevel, opt SockOpt, value interface{}) error
 }
